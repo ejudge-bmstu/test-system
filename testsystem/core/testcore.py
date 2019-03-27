@@ -2,10 +2,6 @@ import docker
 from multiprocessing import Process
 import signal
 
-def handler(signum, frame):
-    raise Exception("end of time")
-
-
 
 class DockerManager(object):
     def __init__(self):
