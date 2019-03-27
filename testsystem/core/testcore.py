@@ -1,5 +1,9 @@
 import docker
 from multiprocessing import Process
+import signal
+
+def handler(signum, frame):
+    raise Exception("end of time")
 
 
 
@@ -12,32 +16,49 @@ class DockerManager(object):
         self.client.images.build(path = project, tag = tag, dockerfile=dockerfile)
 
     @staticmethod
-    def __run_container(container, return_dict, image_name, command, memory_limit = None, mem_swappiness = None):
-        run_specs = {'image': image_name, 'command': command}
-        if memory_limit is not None:
-            run_specs += {'mem_linit': memory_limit}
-        if mem_swappiness is not None:
-            run_specs += {'mem_swappiness': mem_swappiness}
-        result = client.containers.run(run_specs, stderr=True)
+    def __run_container(client, return_dict, run_specs):
+        result = client.containers.run(**run_specs, stderr=True)
         return_dict.append(result)
 
     def run_time_container(self, image_name, command, memory_limit = None, mem_swappiness = None, timeout = None):
         return_dict = []
-        container_instance = Process(target = self.__run_container, args = (self.client, return_dict, image_name, command, memory_limit, mem_swappiness))
-        container_instance.run()
+
+        parametres = {'image': image_name, 'command': command}
+        if memory_limit is not None:
+            mem_limit_dict =  {'mem_limit': memory_limit}
+        if mem_swappiness is not None:
+            mem_swappiness_dict = {'mem_swappiness': mem_swappiness}
+            
+        run_specs = {**parametres, **mem_limit_dict, **mem_swappiness_dict}
+
+        container_instance = Process(target = self.__run_container, args = (self.client, return_dict, run_specs))
+        container_instance.start()   
+
+
 
         container_instance.join(timeout)
         if container_instance.is_alive():
             #stop container and kill subprocess
-            self.client.containers.stop_container(0)
-            container_instance.terminate()
-            container_instance.join()
+            container_list = self.client.containers.list()
+            if len(container_list) > 0:
+                self.__stop_container(container_instance, container_list[0])
+            else:
+                self.__stop_container(container_instance)
+
+        return return_dict
             
 
-    def stop_container(self):
-        pass
+    def __stop_container(self, container_instance, container = None):
+        if container is not None:
+            container.kill()
+        container_instance.terminate()
+        container_instance.join()
 
         
 
 
 
+if __name__ == "__main__":
+    a = DockerManager()
+    a.run_time_container("a:b", "./a.out", memory_limit="20M", mem_swappiness=0, timeout=10)
+    pass
