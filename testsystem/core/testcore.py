@@ -16,6 +16,7 @@ class DockerManager(object):
         result = client.containers.run(**run_specs, stderr=True)
         return_dict.append(result)
 
+
     def run_time_container(self, image_name, command, memory_limit = None, mem_swappiness = None, timeout = None):
         return_dict = []
 
@@ -56,5 +57,5 @@ class DockerManager(object):
 
 if __name__ == "__main__":
     a = DockerManager()
-    a.run_time_container("a:b", "./a.out", memory_limit="20M", mem_swappiness=0, timeout=10)
+    a.run_time_container("a:b", "ls", memory_limit="20M", mem_swappiness=0, timeout=10)
     pass
