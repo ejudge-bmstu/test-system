@@ -1,8 +1,11 @@
 import psycopg2
-import tablestructures
+import tablestructures.answers
+import tablestructures.solution
+import tablestructures.tasklimits
+import tablestructures.tests
 
 class BDManager():
-    def __init__(self,dbname = "Railway",usr = "postgres",psw = "0000",host = "localhost"):
+    def __init__(self,dbname = "ejudge_test",usr = "admin",psw = "admin",host = "localhost"):
         self.connection = psycopg2.connect(database=dbname, user=usr, host=host, password=psw)
 
 
@@ -79,6 +82,11 @@ class BDManager():
 
 
 
-        
+if  __name__ == "__main__":
+    
+    bd = BDManager()
+    g = bd.get_solution('e6e1786c-3fe6-4760-8ef4-8785e5be6b06')
+    g = 0
+    
 
 
