@@ -6,4 +6,4 @@ if __name__ == '__main__':
     pipe_sender = QueueSender()
     queue = server.settings.init_queue(pipe_sender.queue)
     pipe_sender.start()
-    app.run(host="localhost", port = 8080)
+    app.run(host="localhost", port=8080)
