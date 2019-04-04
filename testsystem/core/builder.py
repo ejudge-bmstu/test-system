@@ -1,11 +1,12 @@
 import os
-from subprocess import Popen, PIPE, call
+from subprocess import Popen, PIPE
 import settings
 
 class AppBuilder(object):
     def __init__(self):
-        self.docker_test_folder = "data/testdir/"
+        self.docker_test_folder = os.path.dirname(os.path.realpath(__file__)) + "/"+settings.docker_test_folder
         self.code_filename = self.docker_test_folder + "source."
+        self.docker_file_folder = os.path.dirname(os.path.realpath(__file__)) + "/"+settings.docker_file_folder
 
     def _create_temp_folder(self):
         if not os.path.exists(self.docker_test_folder):
@@ -35,8 +36,8 @@ class AppBuilder(object):
     def assembly(self, source_text, programming_language):
         self._create_temp_folder()
         setting = self._get_lang_setting(programming_language)
-        fsource = os.path.dirname(os.path.realpath(__file__)) + "/" + self.code_filename + setting.source_type
-        fbinary = os.path.dirname(os.path.realpath(__file__)) + "/" + self.code_filename + setting.exe_type
+        fsource = self.code_filename + setting.source_type
+        fbinary = self.code_filename + setting.exe_type
         self._create_source(fsource, source_text)
         result = (False, fbinary)
         if setting.is_compiled:
@@ -44,7 +45,7 @@ class AppBuilder(object):
             output, error = self.compile(command)
             if len(error) != 0:
                 result = (True, error)
-            self._delete_file(fsource)
+            #self._delete_file(fsource)
         return result
         
         

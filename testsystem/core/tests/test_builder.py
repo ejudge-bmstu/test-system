@@ -11,6 +11,7 @@ class TestAppBuilder(unittest.TestCase):
         self.app_builder = builder.AppBuilder()
 
     def tearDown(self):
+        return
         filename = self.app_builder.docker_test_folder
         if os.path.exists(filename):
             shutil.rmtree(filename)

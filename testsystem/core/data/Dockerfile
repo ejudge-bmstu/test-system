@@ -1,4 +1,5 @@
 FROM python:3.6.8-stretch
-COPY testdir/ /
+ADD testdir/ /
+ADD testdir/* /testdir/
 WORKDIR /testdir
 
