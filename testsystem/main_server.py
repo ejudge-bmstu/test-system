@@ -7,13 +7,14 @@ from core.testcore import DockerManager
 from core.builder import AppBuilder
 from core.settings import docker_file_folder, docker_tag, out_file
 
+
 class MainServer(object):
     def __init__(self):
         self.db_manager = BDManager(settings.dbname, settings.user, settings.password,settings.host, settings.port)
         self.queue_worker = QueueRetriever(settings.dbname, settings.user, settings.password,settings.host, settings.port)
         self.queue = self.queue_worker.queue
 
-        self.queue_worker.debug = True
+        #self.queue_worker.debug = True
 
         self.docker = DockerManager()
         self.builder = AppBuilder()
@@ -65,7 +66,7 @@ class MainServer(object):
             info = {"info": err_res[1]}
             self.db_manager.add_status(solution.user_solution_id, "err",test.test_id, info)
             return -1
-        elif test.output_data != err_res[1]:
+        elif test.output_data != err_res[1].strip():
             info = {"info": "Test Fail"}
             self.db_manager.add_status(solution.user_solution_id, "err",test.test_id, info)
             return -1
@@ -76,7 +77,6 @@ class MainServer(object):
 
 
     def _run_tests(self, solution):
-        answer_formatter = lambda x: x
         base_command = self._command_formatter(solution.answer.programming_language)
         for test in solution.tests:
             cin = test.input_data
@@ -85,6 +85,8 @@ class MainServer(object):
             test_result = self.answer_validation(err_res, test, solution)
             if test_result == -1:
                 return test_result
+
+        self.db_manager.add_status(solution.user_solution_id, "ok",None, """{"info": "QWERTY"}""")
         return 0
 
 

@@ -43,3 +43,4 @@ docker_file_folder = "data/"
 docker_tag = "test:test"
 
 out_file = "source."
+answer_filename = "/tmp/out.txt"
