@@ -1,0 +1,5 @@
+dbname = "ejudge_test"
+user = "postgres"
+password = "0000"
+host = "localhost"
+port = "5433"

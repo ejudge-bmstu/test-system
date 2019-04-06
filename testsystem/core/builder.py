@@ -1,12 +1,12 @@
 import os
 from subprocess import Popen, PIPE
-import settings
+from .settings import docker_file_folder, docker_test_folder, out_file, settings_list
 
 class AppBuilder(object):
     def __init__(self):
-        self.docker_test_folder = os.path.dirname(os.path.realpath(__file__)) + "/"+settings.docker_test_folder
-        self.code_filename = self.docker_test_folder + "source."
-        self.docker_file_folder = os.path.dirname(os.path.realpath(__file__)) + "/"+settings.docker_file_folder
+        self.docker_test_folder = os.path.dirname(os.path.realpath(__file__)) + "/"+docker_test_folder
+        self.code_filename = self.docker_test_folder + out_file
+        self.docker_file_folder = os.path.dirname(os.path.realpath(__file__)) + "/"+docker_file_folder
 
     def _create_temp_folder(self):
         if not os.path.exists(self.docker_test_folder):
@@ -21,7 +21,7 @@ class AppBuilder(object):
             f.write(text)
 
     def _get_lang_setting(self, programming_language):
-        for setting in settings.settings_list:
+        for setting in settings_list:
             if programming_language == setting.lang:
                 return setting
         return None

@@ -40,3 +40,6 @@ class CompileSettingsPython(CompileSettings):
 settings_list = (CompileSettingsC(), CompileSettingsCpp(), CompileSettingsPython())
 docker_test_folder = "data/testdir/"
 docker_file_folder = "data/"
+docker_tag = "test:test"
+
+out_file = "source."
