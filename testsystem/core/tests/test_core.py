@@ -293,41 +293,6 @@ fclose(fptr);
         self.assertEqual(result[0], 139)
 
 
-    
-    def test_run_c_compile_err(self):
-        source = """#include <stdio.h>
-#include <stdlib.h>  
-#include <iostream>
-
-
-int main (int argc, char *argv[]) {
- itn i=0, tmp; char *str = "foo";str[0] = 'b';
-    
-   FILE *fptr;
-fptr = fopen("/tmp/out.txt", "w");
-
-
- for (i=1; i< argc; i++) {
-tmp = 3 * atoi(argv[i]);
-     fprintf(fptr, "%d ", tmp);
- }
-fclose(fptr);
-
- return 0;
- }"""
-        
-        bldr = builder.AppBuilder()
-        result = bldr.assembly(source, "cpp")
-
-        self.assertTrue(result[0])
-
-
-
-
-
-
-
-    
     def test_run_cpp_container_ok(self):
         source = """#include <stdio.h>
 #include <stdlib.h>  
