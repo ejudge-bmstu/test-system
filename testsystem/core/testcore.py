@@ -61,7 +61,7 @@ class DockerManager(object):
         timeout_flag = False
         parametres = {'image': image_name, 'command': command}
         if memory_limit is not None:
-            mem_limit_dict =  {'mem_limit': memory_limit * 2 ** 20} # pass memory_limit in MB
+            mem_limit_dict =  {'mem_limit': memory_limit * 2 ** 20} # pass memory_limit in bytes
         if mem_swappiness is not None:
             mem_swappiness_dict = {'mem_swappiness': mem_swappiness}
             
