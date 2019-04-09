@@ -16,7 +16,6 @@ class QueueRetriever(Thread):
         super().__init__()
         self.connection = psycopg2.connect(
             database=dbname, user=usr, host=host, password=psw, port = port)
-        self.connection.autocommit = True
         self.queue = Queue()
 
         self.debug = False
@@ -27,6 +26,7 @@ class QueueRetriever(Thread):
             if not delete:
                 result = cursor.fetchall()
             else:
+                self.connection.commit()
                 result = None
         return result
 

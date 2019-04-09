@@ -1,5 +1,6 @@
-
-
+import json
+#from server import FrontServer
+from server.front_server import FrontServer
 from dbmanager.dbmanager import BDManager
 import settings
 from queueworker.queueworker import QueueRetriever
@@ -13,17 +14,11 @@ class MainServer(object):
         self.db_manager = BDManager(settings.dbname, settings.user, settings.password,settings.host, settings.port)
         self.queue_worker = QueueRetriever(settings.dbname, settings.user, settings.password,settings.host, settings.port)
         self.queue = self.queue_worker.queue
-
-        #self.queue_worker.debug = True
-
         self.docker = DockerManager()
         self.builder = AppBuilder()
 
         
         self.queue_worker.start()
-    def _get_from_queue(self):
-        return self.queue.get()
-
 
     def _get_solution(self):
         solution_id = self.queue.get()
@@ -33,7 +28,8 @@ class MainServer(object):
     def _assembly_files(self, solution):
         code = solution.answer.program_text
         lang = solution.answer.programming_language
-        self.builder.assembly(code, lang)
+        result = self.builder.assembly(code, lang)
+        return result
 
     def _buid_image(self):
         self.docker.build_image(self.builder.docker_file_folder, docker_tag)
@@ -57,20 +53,52 @@ class MainServer(object):
             return "./%s " % (out_file + "out")
 
 
-    def answer_validation(self, err_res, test, solution):
-        if err_res is None:
-            info = {"info": "Time error"}
-            self.db_manager.add_status(solution.user_solution_id, "err",test.test_id, info)
-            return -1
-        elif err_res[0]:
-            info = {"info": err_res[1]}
-            self.db_manager.add_status(solution.user_solution_id, "err",test.test_id, info)
-            return -1
-        elif test.output_data != err_res[1].strip():
-            info = {"info": "Test Fail"}
-            self.db_manager.add_status(solution.user_solution_id, "err",test.test_id, info)
-            return -1
-        return 0
+
+
+
+
+
+    def answer_validation(self, test, answer):
+        answer = answer.strip()
+        test_str = test.output_data.strip()
+        return answer == test_str
+        
+
+
+
+
+
+    def err_code_validation(self, err_res, test, solution):
+        status = "err"
+        err_code, info = err_res
+        user_solution_id = solution.user_solution_id
+        test_id = test.test_id
+
+
+        if err_code is None:
+            ext_info = {"info": "Time error."}
+
+        elif err_code == 0:
+            if self.answer_validation(test, info):
+                status = "ok"
+                test_id = None
+                ext_info = None
+            else:
+                ext_info = {"info": "Wrong answer."}
+        
+        elif err_code == 137:
+            ext_info = {"info": "Memory error."}
+
+        elif err_code == -137:
+            ext_info = {"info": "Minimal memory error. Docker error."}
+            test_id = None
+
+        else:
+            ext_info = {"info": "Programm error.\n {}".format(info)}
+
+        self.db_manager.add_status(user_solution_id, status, test_id, ext_info)
+
+        return 0 if status == "ok" else -1
 
 
 
@@ -82,19 +110,33 @@ class MainServer(object):
             cin = test.input_data
             command = base_command + cin
             err_res = self._run_container(solution, command)
-            test_result = self.answer_validation(err_res, test, solution)
+            test_result = self.err_code_validation(err_res, test, solution)
             if test_result == -1:
-                return test_result
+                break
+        return 
 
-        self.db_manager.add_status(solution.user_solution_id, "ok",None, """{"info": "QWERTY"}""")
-        return 0
+
+    def _build_err_handler(self, information, solution):
+        user_solution_id = solution.user_solution_id
+        status = "err"
+        err_test_id = None
+        ext_info = json.dumps({'info': information})
+
+        self.db_manager.add_status(user_solution_id, status, err_test_id, ext_info)
+            
+
+
 
 
 
     def worker(self):
         solution = self._get_solution()
-        #3f94dffc-d71b-4b3e-84d5-96a4778dbc11
-        self._assembly_files(solution)
+        
+        assembly_err, assembly_info = self._assembly_files(solution)
+        if assembly_err:
+            self._build_err_handler(assembly_info, solution)
+            return 
+
         self._buid_image()
 
         self._run_tests(solution)
@@ -102,12 +144,17 @@ class MainServer(object):
         self._rm_image()
 
     
+    def start(self): 
+        while True:
+            self.worker()
 
-
-
+#3f94dffc-d71b-4b3e-84d5-96a4778dbc11
 if __name__ == "__main__":
+    FS = FrontServer()
+    FS.start()
+
     MS = MainServer()
-    MS.worker()
+    MS.start()
 
 
 

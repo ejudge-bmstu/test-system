@@ -1,3 +1,2 @@
-for _ in range(2):
-     print("Hello, world!")
-                    
+while 1g:
+    pass 

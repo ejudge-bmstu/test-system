@@ -1,7 +1,7 @@
 import docker
 import subprocess, os
 import timeout_decorator
-from settings import answer_filename, answer_dir, answer_len
+from .settings import answer_filename, answer_dir, answer_len
 
 class DockerManager(object):
     def __init__(self):

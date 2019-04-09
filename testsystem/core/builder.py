@@ -1,6 +1,6 @@
 import os, glob
 from subprocess import Popen, PIPE
-from settings import docker_file_folder, docker_test_folder, out_file, settings_list
+from .settings import docker_file_folder, docker_test_folder, out_file, settings_list
 
 class AppBuilder(object):
     def __init__(self):

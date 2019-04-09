@@ -1,7 +1,7 @@
 from flask import Flask, Response
 from .settings import GET_PATH, PARAM_NAME
 from .validator import validate_uuid
-import server.settings
+import settings
 
 app = Flask(__name__)
 
