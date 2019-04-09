@@ -93,7 +93,7 @@ class MainServer(object):
 
     def worker(self):
         solution = self._get_solution()
-        #2f94dffc-d71b-4b3e-84d5-96a4778dbc11
+        #3f94dffc-d71b-4b3e-84d5-96a4778dbc11
         self._assembly_files(solution)
         self._buid_image()
 

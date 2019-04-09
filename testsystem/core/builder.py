@@ -1,6 +1,6 @@
-import os
+import os, glob
 from subprocess import Popen, PIPE
-from .settings import docker_file_folder, docker_test_folder, out_file, settings_list
+from settings import docker_file_folder, docker_test_folder, out_file, settings_list
 
 class AppBuilder(object):
     def __init__(self):
@@ -48,7 +48,13 @@ class AppBuilder(object):
             #self._delete_file(fsource)
         return result
         
-        
+    def clean_folder(self):
+        listfiles = [os.path.abspath(f) for f in os.listdir(docker_test_folder)]
+        for f in listfiles:
+            self._delete_file(f)
+
+
+
 
 if __name__ == "__main__":
     app_builder = AppBuilder()

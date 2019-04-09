@@ -1,44 +1,54 @@
 import docker
 import subprocess, os
 import timeout_decorator
-
+from settings import answer_filename, answer_dir, answer_len
 
 class DockerManager(object):
     def __init__(self):
         self.client = docker.from_env()
-        self.current_image = None
 
     def build_image(self, project, tag, dockerfile = "Dockerfile"):
         self.client.images.build(path = project, tag = tag, dockerfile=dockerfile)
 
     def rm_image(self, tag):
         self.client.images.remove(image=tag, force=True, noprune=False)
-        #os.system("""docker rmi $(docker images --filter "dangling=true" -q --no-trunc) -f""")
-
-    
-    #@staticmethod
-    time_for_timeout = 6
-    @timeout_decorator.timeout(time_for_timeout)
-    def _run_container(self, client, queue, run_specs):
         try:
-            result = client.containers.run(**run_specs, stderr=True, volumes={'/tmp/': {'bind': '/tmp/', 'mode': 'rw'}}).decode("utf-8")
+            os.system("""docker rmi $(docker images --filter "dangling=true" -q --no-trunc) -f""")
+        except:
+            pass
+
+
+    def _run_container(self, client, run_specs, time):
+    
+        @timeout_decorator.timeout(time)
+        def run_container(client, run_specs):
             error = 0
-        except docker.errors.ContainerError as exeption:
-            error = exeption.exit_status
-            result = exeption.stderr.decode("utf-8")
-        return [error, result]
+            dn = os.path.dirname(os.path.realpath(__file__))
+            mapper_folder = dn + "/" + answer_dir
+            try:
+                result = client.containers.run(**run_specs, stderr=True, volumes={mapper_folder: {'bind': '/tmp/', 'mode': 'rw'}}).decode("utf-8")
+            except docker.errors.ContainerError as exeption:
+                error = exeption.exit_status
+                result = exeption.stderr.decode("utf-8")
+            except docker.errors.APIError as exeption:
+                error = -137
+                result = "API ERROR. Minimal memory for task error."
+            return [error, result]
+
+        return run_container(client, run_specs)
 
 
     def _get_answer(self):
-        path = "/tmp/out.txt"
-        buffer_len = 255
-
+        path = answer_filename
         answer = ""
         if not os.path.exists(path):
             return None
         with open(path, "r") as f:
-            answer = f.read(buffer_len)
-        os.unlink(path)
+            answer = f.read(answer_len)
+        try:
+            os.unlink(path)
+        except:
+            print("Unable to delete file.")
         return answer
         
 
@@ -57,27 +67,22 @@ class DockerManager(object):
             
         run_specs = {**parametres, **mem_limit_dict, **mem_swappiness_dict}
 
-        self.time_for_timeout = timeout
-
         try:
-            result = self._run_container(self.client, None, run_specs)
+            result = self._run_container(self.client, run_specs, timeout)
         except timeout_decorator.timeout_decorator.TimeoutError:
             timeout_flag = True
        
         if timeout_flag:
-            #stop container and kill subprocess
+            #stop container
             container_list = self.client.containers.list()
             if len(container_list) > 0:
                 self._stop_container(container_list[0])
-        elif not result[0]:
-            result[1] = self._get_answer()
-            
-            
-
-        if timeout_flag:
             return None
-        else:
-            return result
+        elif result[0] == 0:
+            result[1] = self._get_answer()
+
+        return result   
+
 
             
 
