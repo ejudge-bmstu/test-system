@@ -1,5 +1,3 @@
-import json
-#from server import FrontServer
 from server.front_server import FrontServer
 from dbmanager.dbmanager import BDManager
 import settings
@@ -69,32 +67,33 @@ class MainServer(object):
 
 
     def err_code_validation(self, err_res, test, solution):
-        status = "err"
+        status = "Error"
         err_code, info = err_res if err_res is not None else [None] * 2
         user_solution_id = solution.user_solution_id
         test_id = test.test_id
+        ext_info = None
 
 
         if err_code is None:
-            ext_info = {"info": "Time error."}
-
+            status = "Прохождение теста превысило максимальное время для задания."
         elif err_code == 0:
             if self.answer_validation(test, info):
                 return 0
             else:
-                ext_info = {"info": "Wrong answer."}
+                status = "Неверный ответ."
         
         elif err_code == 137:
-            ext_info = {"info": "Memory error."}
+            status = "Прохождение теста превысило максимальный объем памяти задания."
 
         elif err_code == -137:
-            ext_info = {"info": "Minimal memory error. Docker error."}
+            ext_info = "Minimal memory error. Docker error."
             test_id = None
 
         else:
-            ext_info = {"info": "Programm error.\n {}".format(info)}
+            status = "Ошибка времени выполнения."
+            ext_info = "{}".format(info)
 
-        self.db_manager.add_status(user_solution_id, status, test_id, json.dumps(ext_info))
+        self.db_manager.add_status(user_solution_id, status, test_id, ext_info)
 
         return -1
 
@@ -112,15 +111,15 @@ class MainServer(object):
             if test_result == -1:
                 return
 
-        self.db_manager.add_status(solution.user_solution_id, "ok", None, None)
+        self.db_manager.add_status(solution.user_solution_id, "Задание выполнено.", None, None)
         return 
 
 
     def _build_err_handler(self, information, solution):
         user_solution_id = solution.user_solution_id
-        status = "err"
+        status = "Ошибка компиляции."
         err_test_id = None
-        ext_info = json.dumps({'info': information})
+        ext_info = information
 
         self.db_manager.add_status(user_solution_id, status, err_test_id, ext_info)
             
@@ -148,7 +147,7 @@ class MainServer(object):
         while True:
             self.worker()
 
-#2f94dffc-d71b-4b3e-84d5-96a4778dbc11
+
 if __name__ == "__main__":
     FS = FrontServer()
     FS.start()
