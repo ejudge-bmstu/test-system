@@ -1,6 +1,5 @@
 
 from threading import Thread
-from queue import Queue
 import psycopg2
 import uuid
 import time
@@ -19,7 +18,11 @@ class QueueSender(Thread):
         self.connection = psycopg2.connect(
             database=dbname, user=usr, host=host, password=psw, port=port)
         self.connection.autocommit = True
-        self.queue = Queue()
+        self.queue = None
+
+
+    def init_queue(self, queue):
+        self.queue = queue
 
     def __make_request(self, request, params):
         with self.connection.cursor() as cursor:

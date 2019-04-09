@@ -2,15 +2,15 @@ from threading import Thread
 #from tools.controller import app
 #from tools.server.controller import app
 from .sender import QueueSender
-from .controller import app
-from .settings import init_queue
+from .controller import app, queue
+
 
 
 class FrontServer(Thread):
     def __init__(self):
         super().__init__()
         self.sender = QueueSender()
-        self.queue = init_queue(self.sender.queue)
+        self.sender.init_queue(queue)
     def run(self, server_host = "localhost", server_port = 8080):
         self.sender.start()
         app.run(host=server_host, port=server_port)

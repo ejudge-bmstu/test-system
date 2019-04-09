@@ -70,7 +70,7 @@ class MainServer(object):
 
     def err_code_validation(self, err_res, test, solution):
         status = "err"
-        err_code, info = err_res
+        err_code, info = err_res if err_res is not None else [None] * 2
         user_solution_id = solution.user_solution_id
         test_id = test.test_id
 
@@ -80,9 +80,7 @@ class MainServer(object):
 
         elif err_code == 0:
             if self.answer_validation(test, info):
-                status = "ok"
-                test_id = None
-                ext_info = None
+                return 0
             else:
                 ext_info = {"info": "Wrong answer."}
         
@@ -96,9 +94,9 @@ class MainServer(object):
         else:
             ext_info = {"info": "Programm error.\n {}".format(info)}
 
-        self.db_manager.add_status(user_solution_id, status, test_id, ext_info)
+        self.db_manager.add_status(user_solution_id, status, test_id, json.dumps(ext_info))
 
-        return 0 if status == "ok" else -1
+        return -1
 
 
 
@@ -112,7 +110,9 @@ class MainServer(object):
             err_res = self._run_container(solution, command)
             test_result = self.err_code_validation(err_res, test, solution)
             if test_result == -1:
-                break
+                return
+
+        self.db_manager.add_status(solution.user_solution_id, "ok", None, None)
         return 
 
 
@@ -148,7 +148,7 @@ class MainServer(object):
         while True:
             self.worker()
 
-#3f94dffc-d71b-4b3e-84d5-96a4778dbc11
+#2f94dffc-d71b-4b3e-84d5-96a4778dbc11
 if __name__ == "__main__":
     FS = FrontServer()
     FS.start()

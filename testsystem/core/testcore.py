@@ -39,7 +39,7 @@ class DockerManager(object):
 
 
     def _get_answer(self):
-        path = answer_filename
+        path = os.path.dirname(os.path.realpath(__file__)) + "/" + answer_filename
         answer = ""
         if not os.path.exists(path):
             return None
