@@ -1,8 +1,5 @@
 import psycopg2
-import tablestructures.answers
-import tablestructures.solution
-import tablestructures.tasklimits
-import tablestructures.tests
+from .tablestructures import answers, solution, tasklimits, tests
 import uuid
 
 class BDManager():
@@ -28,10 +25,10 @@ class BDManager():
             return None
         else:
             result = results[0]
-            return tablestructures.answers.Answers(result[0], result[1])
+            return answers.Answers(result[0], result[1])
 
     def _get_task_limit(self, task_id, programming_language):
-        request = """SELECT memory_limit, time_limit, programming_language FROM task_limits WHERE id = %(task_id)s AND programming_language = %(programming_language)s"""
+        request = """SELECT memory_limit, time_limit, programming_language FROM task_limits WHERE task_id = %(task_id)s AND programming_language = %(programming_language)s"""
         params = {'task_id': task_id, 'programming_language': programming_language}
         results = self._make_request(request, params)
 
@@ -39,17 +36,17 @@ class BDManager():
             return None
         else:
             result = results[0]
-            return tablestructures.tasklimits.TaskLimits(result[0], result[1], result[2])
+            return tasklimits.TaskLimits(result[0], result[1], result[2])
 
     def _get_tests(self, task_id):
-        request = """SELECT input_data, output_data FROM tests WHERE task_id = %(task_id)s"""
+        request = """SELECT input_data, output_data, id FROM tests WHERE task_id = %(task_id)s"""
         params = {'task_id': task_id}
         results = self._make_request(request, params)
 
         if len(results) == 0:
             return None
         else:
-            return [tablestructures.tests.Tests(test[0], test[1]) for test in results]
+            return [tests.Tests(test[0], test[1], test[2]) for test in results]
 
     def _get_taskid(self, user_solution_id):
         request = """SELECT task_id FROM user_solutions WHERE id = %(user_solution_id)s"""
@@ -81,8 +78,8 @@ class BDManager():
         task_limit = self._get_task_limit(task_id, answer.programming_language)
         tests = self._get_tests(task_id)
 
-        solution = tablestructures.solution.Solution(user_solution_id, answer, tests, task_limit)
-        return solution
+        sol = solution.Solution(user_solution_id, answer, tests, task_limit)
+        return sol
 
     def _add_status(self, status_id, result, error_test_id, ext_info = ""):
         request = """INSERT INTO status (id, result, error_test_id, extended_information) VALUES (%(status_id)s,%(result)s,%(error_test_id)s,%(ext_info)s)"""

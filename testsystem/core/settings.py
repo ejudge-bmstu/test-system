@@ -13,7 +13,7 @@ class CompileSettings(object):
 class CompileSettingsC(CompileSettings):
     def __init__(self):
         super().__init__()
-        self.parameters = "gcc -O0 "
+        self.parameters = "gcc -O0 -w "
         self.lang = "c"
         self.exe_type = "out"
         self.source_type = "c"
@@ -21,7 +21,7 @@ class CompileSettingsC(CompileSettings):
 class CompileSettingsCpp(CompileSettings):
     def __init__(self):
         super().__init__()
-        self.parameters = "g++ -O0 " 
+        self.parameters = "g++ -O0 -w " 
         self.lang = "cpp"
         self.exe_type = "out"
         self.source_type = "cpp"
@@ -40,3 +40,9 @@ class CompileSettingsPython(CompileSettings):
 settings_list = (CompileSettingsC(), CompileSettingsCpp(), CompileSettingsPython())
 docker_test_folder = "data/testdir/"
 docker_file_folder = "data/"
+docker_tag = "test:test"
+
+out_file = "source."
+answer_dir = "data/map_folder/"
+answer_filename = answer_dir + "/" + "out.txt"
+answer_len = 256

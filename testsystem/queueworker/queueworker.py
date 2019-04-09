@@ -2,43 +2,77 @@
 from threading import Thread
 from queue import Queue
 import psycopg2
+import time
 
 
-
-class QueueSender(Thread):
+class QueueRetriever(Thread):
     def __init__(
             self,
-            dbname="ejudge_queue",
+            dbname="ejudge_test",
             usr="postgres",
             psw="0000",
-            host="localhost"):
+            host="localhost",
+            port="5433"):
         super().__init__()
         self.connection = psycopg2.connect(
-            database=dbname, user=usr, host=host, password=psw)
+            database=dbname, user=usr, host=host, password=psw, port = port)
         self.queue = Queue()
 
-    def __make_request(self, request, params = {}):
+        self.debug = False
+
+    def __make_request(self, request, params = {}, delete = False):
         with self.connection.cursor() as cursor:
             cursor.execute(request, params)
-            result = cursor.fetchall()
+            if not delete:
+                result = cursor.fetchall()
+            else:
+                self.connection.commit()
+                result = None
         return result
 
 
+    def __del_element(self, queue_id):
+        request = "DELETE FROM queue WHERE id=%(queue_id)s"
+        param = {"queue_id": queue_id}
+        self.__make_request(request, param, True)
+
+
+
     def __get(self):
-        request = "SELECT solution_id, min(unixtime) FROM queue"
+        request = "SELECT id, solution_id, min(unixtime) FROM queue GROUP BY id"
         result = self.__make_request(request)
         if len(result) == 0:
-            return None
-        return result[0]
+            return None, None
+        result = result[0]
+        return result[0], result[1]
 
     def __get_solution_id(self):
-        result = self.__get()
-        return result[0]
+        queue_id, solution_id = self.__get()
+        if queue_id is None:
+            return None
+        if not self.debug:
+            self.__del_element(queue_id)
+        else:
+            print(solution_id)
+        return solution_id
 
     def run(self):
         while True:
             solution_id = self.__get_solution_id()
-            self.queue.put(solution_id)
+            if solution_id is not None:
+                self.queue.put(solution_id)
+            else:
+                time.sleep(3)
+
+            if self.debug:
+                return
+
 
             
-            
+if  __name__ == "__main__":
+    QR = QueueRetriever()
+    QR.debug = True
+    QR.start()
+    while 1:
+        print(QR.queue.get())
+    b= 0

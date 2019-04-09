@@ -1,6 +1,5 @@
 
 from threading import Thread
-from queue import Queue
 import psycopg2
 import uuid
 import time
@@ -10,15 +9,20 @@ from .validator import validate_uuid
 class QueueSender(Thread):
     def __init__(
             self,
-            dbname="ejudge_queue",
+            dbname="ejudge_test",
             usr="postgres",
             psw="0000",
-            host="localhost"):
+            host="localhost",
+            port="5433"):
         super().__init__()
         self.connection = psycopg2.connect(
-            database=dbname, user=usr, host=host, password=psw)
+            database=dbname, user=usr, host=host, password=psw, port=port)
         self.connection.autocommit = True
-        self.queue = Queue()
+        self.queue = None
+
+
+    def init_queue(self, queue):
+        self.queue = queue
 
     def __make_request(self, request, params):
         with self.connection.cursor() as cursor:
