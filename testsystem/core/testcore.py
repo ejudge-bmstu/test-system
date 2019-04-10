@@ -4,13 +4,31 @@ import timeout_decorator
 from .settings import answer_filename, answer_dir, answer_len
 
 class DockerManager(object):
+    """
+    DockerManager is needed for the interaction with docker containers.
+    """
     def __init__(self):
+        """
+   Initialisation of DockerManager.
+    :return: None
+    """
         self.client = docker.from_env()
 
     def build_image(self, project, tag, dockerfile = "Dockerfile"):
+        """
+   Build image with users source code.
+    :param project: Dockerfile path.
+    :param tag: tag of container.
+    :param dockerfile: name of file with container settings.
+    """
         self.client.images.build(path = project, tag = tag, dockerfile=dockerfile)
 
     def rm_image(self, tag):
+        """
+   Delete certain docker image.
+    :param tag: tag of container.
+    :return: None
+    """
         self.client.images.remove(image=tag, force=True, noprune=False)
         try:
             os.system("""docker rmi $(docker images --filter "dangling=true" -q --no-trunc) -f""")
@@ -19,7 +37,13 @@ class DockerManager(object):
 
 
     def _run_container(self, client, run_specs, time):
-    
+        """
+   Run the container with user code.
+    :param client: module that connected to docker API.
+    :param run_specs: settings of run command.
+    :param time: maximum working time.
+    :return: error code and ext information.
+    """
         @timeout_decorator.timeout(time)
         def run_container(client, run_specs):
             error = 0
@@ -39,6 +63,10 @@ class DockerManager(object):
 
 
     def _get_answer(self):
+        """
+   Get answer from users answer file.
+    :return: None if file doesnt exist else return user answer.
+    """
         path = os.path.dirname(os.path.realpath(__file__)) + "/" + answer_filename
         answer = ""
         if not os.path.exists(path):
@@ -58,6 +86,15 @@ class DockerManager(object):
 
 
     def run_time_container(self, image_name, command, memory_limit = None, mem_swappiness = None, timeout = None):
+        """
+   Prepare to run the container.
+    :param image_name: name of docker image.
+    :param command: command to run image.
+    :param memory_limit: maximum working memory of container.
+    :param mem_swappiness: maximum of swap memory for container.
+    :param timeout: maximum working time.
+    :return: error code and ext information.
+    """
         timeout_flag = False
         parametres = {'image': image_name, 'command': command}
         if memory_limit is not None:
@@ -87,6 +124,10 @@ class DockerManager(object):
             
 
     def _stop_container(self, container):
+        """Stop the container.
+    :param client: container to stop.
+    :return: None
+    """
         if container is not None:
             container.kill()
 
