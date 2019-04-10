@@ -1,6 +1,6 @@
 from threading import Thread
 from .sender import QueueSender
-from .сontroller import app, queue
+from .controller import app, queue
 
 
 class FrontServer(Thread):
