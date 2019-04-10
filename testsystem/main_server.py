@@ -5,6 +5,7 @@ from core.testcore import DockerManager
 from core.builder import AppBuilder
 from core.settings import docker_file_folder, docker_tag, out_file
 from server_settings import db_settings, rest_settings 
+from threading import Thread
 
 class MainServer(object):
     def __init__(self):
@@ -60,11 +61,6 @@ class MainServer(object):
         test_str = test.output_data.strip()
         return answer == test_str
         
-
-
-
-
-
     def err_code_validation(self, err_res, test, solution):
         status = "Error"
         err_code, info = err_res if err_res is not None else [None] * 2
@@ -95,9 +91,6 @@ class MainServer(object):
         self.db_manager.add_status(user_solution_id, status, test_id, ext_info)
 
         return -1
-
-
-
 
 
     def _run_tests(self, solution):
@@ -143,16 +136,37 @@ class MainServer(object):
 
     
     def start(self): 
-        while True:
-            self.worker()
+        try:
+            while True:
+                self.worker()
+        except KeyboardInterrupt:
+            pass
 
 
-if __name__ == "__main__":
+
+def init():
     FS = FrontServer(db_settings, rest_settings)
     FS.start()
 
     MS = MainServer()
     MS.start()
+
+
+
+
+class SystemTest(object):
+    def __init__(self):
+        self.fs = FrontServer(db_settings, rest_settings)
+        self.ms = MainServer()
+    def start(self):
+        self.fs.start()
+        self.ms.start()
+
+
+
+
+if __name__ == "__main__":
+    init()
 
 
 

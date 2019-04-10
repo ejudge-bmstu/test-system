@@ -2,7 +2,7 @@
 
 #Database settings
 db_settings = {
-"database" : "ejudge_test",
+"database" : "ejudge",
 "user" : "postgres",
 "password" : "0000",
 "host" : "localhost",
