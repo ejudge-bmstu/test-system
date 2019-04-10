@@ -8,7 +8,14 @@ from server_settings import db_settings, rest_settings
 from threading import Thread
 
 class MainServer(object):
+    """
+    Organizes the interaction of all modules of the test system.
+    """
     def __init__(self):
+        """
+   Initialisation of MainServer.
+    :return: None
+    """
         self.db_manager = BDManager(db_settings)
         self.queue_worker = QueueRetriever(db_settings)
         self.queue = self.queue_worker.queue
@@ -19,23 +26,48 @@ class MainServer(object):
         self.queue_worker.start()
 
     def _get_solution(self):
+        """
+    Method to get solution struct from BDManager.
+    :return: solution struct.
+    """
         solution_id = self.queue.get()
         solution = self.db_manager.get_solution(solution_id)
         return solution
 
     def _assembly_files(self, solution):
+        """
+    Method prepare user solution to containerization.
+    :param solution: user solution struct.
+    :return: existing of error and ext information.
+    """
         code = solution.answer.program_text
         lang = solution.answer.programming_language
         result = self.builder.assembly(code, lang)
         return result
 
-    def _buid_image(self):
+    def _build_image(self):
+        """
+   Build image with users source code.
+    :param dockerfile: name of file with container settings.
+    :return: None.
+    """
         self.docker.build_image(self.builder.docker_file_folder, docker_tag)
 
     def _rm_image(self):
+        """
+   Delete docker image after tests.
+    :param tag: tag of container.
+    :return: None
+    """
         self.docker.rm_image(docker_tag)
 
     def _run_container(self, solution, command):
+        """
+   Run the container for test.
+    :param solution: user solution struct.
+    :param command: docker command to run image.
+    :return: error code and ext information.
+    """
         limit = solution.get_limit(solution.answer.programming_language)
         mem_swappiness = 0
         memory_limit = limit.memory_limit
@@ -45,23 +77,36 @@ class MainServer(object):
         return err_res
     
     def _command_formatter(self, lang):
+        """
+    Method to create command that run docker image.
+    :param lang: programming language.
+    :return: command that run docker image.
+    """
         if lang == "python":
             return "python3 %s " % (out_file + "py")
         elif lang == "c" or lang == "cpp":
             return "./%s " % (out_file + "out")
 
-
-
-
-
-
-
     def answer_validation(self, test, answer):
+        """
+    Method compare user answer and right answer.
+    :param test: test struct with right answer.
+    :param answer: user answer.
+    :return: True if user answer is right else return False.
+    """
         answer = answer.strip()
         test_str = test.output_data.strip()
         return answer == test_str
         
     def err_code_validation(self, err_res, test, solution):
+        """
+    Method compare error code from test with patterns and save result 
+    in database if error code != 0.
+    :param err_res: error code.
+    :param test: test struct with test id.
+    :param solution: user solution struct.
+    :return: 0 if no errors (err_res == 0) else return -1.
+    """
         status = "Error"
         err_code, info = err_res if err_res is not None else [None] * 2
         user_solution_id = solution.user_solution_id
@@ -94,6 +139,11 @@ class MainServer(object):
 
 
     def _run_tests(self, solution):
+        """
+   Run the tests for users solution and save result to database.
+    :param solution: user solution struct.
+    :return: None
+    """
         base_command = self._command_formatter(solution.answer.programming_language)
         for test in solution.tests:
             cin = test.input_data
@@ -108,6 +158,12 @@ class MainServer(object):
 
 
     def _build_err_handler(self, information, solution):
+        """
+   Add error compile to user solution status in database.
+    :param information: extended information.
+    :param solution: user solution struct.
+    :return: None
+    """
         user_solution_id = solution.user_solution_id
         status = "Ошибка компиляции."
         err_test_id = None
@@ -121,14 +177,17 @@ class MainServer(object):
 
 
     def worker(self):
+        """
+   Get, compile and test one user solution from queue.
+    :return: None
+    """
         solution = self._get_solution()
-        
         assembly_err, assembly_info = self._assembly_files(solution)
         if assembly_err:
             self._build_err_handler(assembly_info, solution)
             return 
 
-        self._buid_image()
+        self._build_image()
 
         self._run_tests(solution)
 
@@ -136,6 +195,10 @@ class MainServer(object):
 
     
     def start(self): 
+        """
+   Start the MainServer in infinite loop.
+    :return: None.
+    """
         try:
             while True:
                 self.worker()
@@ -150,20 +213,6 @@ def init():
 
     MS = MainServer()
     MS.start()
-
-
-
-
-class SystemTest(object):
-    def __init__(self):
-        self.fs = FrontServer(db_settings, rest_settings)
-        self.ms = MainServer()
-    def start(self):
-        self.fs.start()
-        self.ms.start()
-
-
-
 
 if __name__ == "__main__":
     init()

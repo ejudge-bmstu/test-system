@@ -6,7 +6,15 @@ import time
 
 
 class QueueRetriever(Thread):
+    """
+    QueueRetriever need to get solution id from database queue.
+    """
     def __init__(self, db_settings):
+        """
+   Initialisation of QueueRetriever.
+    :param db_settings: setting of database to connect.
+    :return: None
+    """
         super().__init__()
         self.connection = psycopg2.connect(**db_settings)
         self.queue = Queue()
@@ -14,6 +22,13 @@ class QueueRetriever(Thread):
         self.debug = False
 
     def __make_request(self, request, params = {}, delete = False):
+        """
+    Method to make custom request to database.
+    :param request: body of SQL-request without parameters.
+    :param params: parameters for SQL-request.
+    :param delete: Is request for delete row.
+    :return: None if request for delete row else return result of request.
+    """
         with self.connection.cursor() as cursor:
             cursor.execute(request, params)
             if not delete:
@@ -25,6 +40,11 @@ class QueueRetriever(Thread):
 
 
     def __del_element(self, queue_id):
+        """
+    Method to create SQL request to remove solution_id from queue.
+    :param queue_id: id of row with solution_id.
+    :return: None
+    """
         request = "DELETE FROM queue WHERE id=%(queue_id)s"
         param = {"queue_id": queue_id}
         self.__make_request(request, param, True)
@@ -32,6 +52,10 @@ class QueueRetriever(Thread):
 
 
     def __get(self):
+        """
+    Method to create SQL request to get solution_id.
+    :return: queue id and solution id
+    """
         request = "SELECT id, solution_id, min(unixtime) FROM queue GROUP BY id"
         result = self.__make_request(request)
         if len(result) == 0:
@@ -39,7 +63,11 @@ class QueueRetriever(Thread):
         result = result[0]
         return result[0], result[1]
 
-    def __get_solution_id(self):
+    def _get_solution_id(self):
+        """
+    Method to get solution_id from queue.
+    :return: solution id
+    """
         queue_id, solution_id = self.__get()
         if queue_id is None:
             return None
@@ -50,8 +78,12 @@ class QueueRetriever(Thread):
         return solution_id
 
     def run(self):
+        """
+    Method run QueueRetriever.
+    :return: None
+    """
         while True:
-            solution_id = self.__get_solution_id()
+            solution_id = self._get_solution_id()
             if solution_id is not None:
                 self.queue.put(solution_id)
             else:
