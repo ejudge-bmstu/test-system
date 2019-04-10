@@ -3,8 +3,8 @@ from .tablestructures import answers, solution, tasklimits, tests
 import uuid
 
 class BDManager():
-    def __init__(self,dbname = "ejudge_test",usr = "admin",psw = "admin",host = "localhost", port = "5332"):
-        self.connection = psycopg2.connect(database=dbname, user=usr, host=host, password=psw, port=port)
+    def __init__(self, db_settings):
+        self.connection = psycopg2.connect(**db_settings)
         self.connection.autocommit = True
 
     def _make_request(self, request, params, insert = False):

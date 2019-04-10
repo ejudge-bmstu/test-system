@@ -1,16 +1,15 @@
 from server.front_server import FrontServer
 from dbmanager.dbmanager import BDManager
-import settings
 from queueworker.queueworker import QueueRetriever
 from core.testcore import DockerManager
 from core.builder import AppBuilder
 from core.settings import docker_file_folder, docker_tag, out_file
-
+from server_settings import db_settings, rest_settings 
 
 class MainServer(object):
     def __init__(self):
-        self.db_manager = BDManager(settings.dbname, settings.user, settings.password,settings.host, settings.port)
-        self.queue_worker = QueueRetriever(settings.dbname, settings.user, settings.password,settings.host, settings.port)
+        self.db_manager = BDManager(db_settings)
+        self.queue_worker = QueueRetriever(db_settings)
         self.queue = self.queue_worker.queue
         self.docker = DockerManager()
         self.builder = AppBuilder()
@@ -149,7 +148,7 @@ class MainServer(object):
 
 
 if __name__ == "__main__":
-    FS = FrontServer()
+    FS = FrontServer(db_settings, rest_settings)
     FS.start()
 
     MS = MainServer()

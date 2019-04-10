@@ -6,16 +6,9 @@ import time
 
 
 class QueueRetriever(Thread):
-    def __init__(
-            self,
-            dbname="ejudge_test",
-            usr="postgres",
-            psw="0000",
-            host="localhost",
-            port="5433"):
+    def __init__(self, db_settings):
         super().__init__()
-        self.connection = psycopg2.connect(
-            database=dbname, user=usr, host=host, password=psw, port = port)
+        self.connection = psycopg2.connect(**db_settings)
         self.queue = Queue()
 
         self.debug = False
