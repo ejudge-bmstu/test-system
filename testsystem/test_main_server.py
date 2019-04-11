@@ -122,7 +122,7 @@ class TestAppBuilder(unittest.TestCase):
 
 
 if __name__ == "__main__":
-calcTestSuite = unittest.TestSuite()
+    calcTestSuite = unittest.TestSuite()
     calcTestSuite.addTest(unittest.makeSuite(TestAppBuilder))
     runner = unittest.TextTestRunner(verbosity=2, stream=sys.stdout)
     result = runner.run(calcTestSuite)
