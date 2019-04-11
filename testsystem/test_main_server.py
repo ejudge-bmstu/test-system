@@ -1,4 +1,3 @@
-from main_server import SystemTest
 import server_settings
 import requests
 import unittest
