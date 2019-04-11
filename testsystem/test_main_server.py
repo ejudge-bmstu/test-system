@@ -124,6 +124,7 @@ class TestAppBuilder(unittest.TestCase):
 if __name__ == "__main__":
     calcTestSuite = unittest.TestSuite()
     calcTestSuite.addTest(unittest.makeSuite(TestAppBuilder))
+    print("count_of_tests:" + str(len(calcTestSuite._tests[0]._tests)))
     runner = unittest.TextTestRunner(verbosity=2, stream=sys.stdout)
     result = runner.run(calcTestSuite)
     unittest.main(exit=False)
