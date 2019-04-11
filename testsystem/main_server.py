@@ -5,7 +5,7 @@ from core.testcore import DockerManager
 from core.builder import AppBuilder
 from core.settings import docker_file_folder, docker_tag, out_file
 from server_settings import db_settings, rest_settings 
-from threading import Thread5
+from threading import Thread
 
 class MainServer(object):
     """
