@@ -2,6 +2,7 @@ import server_settings
 import requests
 import unittest
 import time
+import sys
 import psycopg2
 class TestAppBuilder(unittest.TestCase):
     def __init__(self, methodName = "runTest"):
@@ -121,4 +122,8 @@ class TestAppBuilder(unittest.TestCase):
 
 
 if __name__ == "__main__":
+calcTestSuite = unittest.TestSuite()
+    calcTestSuite.addTest(unittest.makeSuite(TestAppBuilder))
+    runner = unittest.TextTestRunner(verbosity=2, stream=sys.stdout)
+    result = runner.run(calcTestSuite)
     unittest.main(exit=False)
