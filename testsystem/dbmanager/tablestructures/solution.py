@@ -7,6 +7,7 @@ class Solution(object):
         self.limits = limits
         self.user_solution_id = user_solution_id
         self.__status = None
+        self.passed = 0
 
     status = property()
 

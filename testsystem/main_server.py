@@ -133,7 +133,7 @@ class MainServer(object):
             status = "Ошибка времени выполнения."
             ext_info = "{}".format(info)
 
-        self.db_manager.add_status(user_solution_id, status, test_id, ext_info)
+        self.db_manager.add_status(user_solution_id, status, solution.passed, test_id, ext_info)
 
         return -1
 
@@ -152,8 +152,9 @@ class MainServer(object):
             test_result = self.err_code_validation(err_res, test, solution)
             if test_result == -1:
                 return
+            solution.passed += 1
 
-        self.db_manager.add_status(solution.user_solution_id, "Задание выполнено.", None, None)
+        self.db_manager.add_status(solution.user_solution_id, "Задание выполнено.",solution.passed ,None, None)
         return 
 
 
@@ -168,8 +169,9 @@ class MainServer(object):
         status = "Ошибка компиляции."
         err_test_id = None
         ext_info = information
+        passed = 0
 
-        self.db_manager.add_status(user_solution_id, status, err_test_id, ext_info)
+        self.db_manager.add_status(user_solution_id, status, passed, err_test_id, ext_info)
             
 
 
