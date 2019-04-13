@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module dbmanager</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>dbmanager</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/john/Desktop/test-system/test-system/testsystem/dbmanager/dbmanager.py">/home/john/Desktop/test-system/test-system/testsystem/dbmanager/dbmanager.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="tablestructures.answers.html">tablestructures.answers</a><br>
+<a href="psycopg2.html">psycopg2</a><br>
+</td><td width="25%" valign=top><a href="tablestructures.solution.html">tablestructures.solution</a><br>
+<a href="tablestructures.tasklimits.html">tablestructures.tasklimits</a><br>
+</td><td width="25%" valign=top><a href="tablestructures.tests.html">tablestructures.tests</a><br>
+<a href="uuid.html">uuid</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="dbmanager.html#BDManager">BDManager</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="BDManager">class <strong>BDManager</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#BDManager">BDManager</a>&nbsp;is&nbsp;needed&nbsp;for&nbsp;the&nbsp;interaction&nbsp;of&nbsp;the&nbsp;main&nbsp;server&nbsp;and&nbsp;the&nbsp;database.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="BDManager-__init__"><strong>__init__</strong></a>(self, db_settings)</dt><dd><tt>Initialisation&nbsp;of&nbsp;<a href="#BDManager">BDManager</a>.<br>
+&nbsp;:param&nbsp;db_settings:&nbsp;setting&nbsp;of&nbsp;database&nbsp;to&nbsp;connect.<br>
+&nbsp;:return:&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="BDManager-add_status"><strong>add_status</strong></a>(self, user_solution_id, result, error_test_id, ext_info='')</dt><dd><tt>Method&nbsp;to&nbsp;add&nbsp;status&nbsp;of&nbsp;solution.<br>
+:param&nbsp;status_id:&nbsp;status&nbsp;id.<br>
+:param&nbsp;result:&nbsp;result&nbsp;of&nbsp;solution.<br>
+:param&nbsp;error_test_id:&nbsp;id&nbsp;of&nbsp;test&nbsp;where&nbsp;solution&nbsp;got&nbsp;error.<br>
+:param&nbsp;ext_info:&nbsp;extended&nbsp;information.<br>
+:return:&nbsp;new&nbsp;id&nbsp;of&nbsp;created&nbsp;status</tt></dd></dl>
+
+<dl><dt><a name="BDManager-get_answer"><strong>get_answer</strong></a>(self, answer_id)</dt><dd><tt>Method&nbsp;to&nbsp;get&nbsp;answer&nbsp;from&nbsp;database.<br>
+:param&nbsp;answer_id:&nbsp;answer&nbsp;id&nbsp;of&nbsp;solution.<br>
+:return:&nbsp;None&nbsp;if&nbsp;no&nbsp;results&nbsp;else&nbsp;return&nbsp;result&nbsp;in&nbsp;Answer&nbsp;struct.</tt></dd></dl>
+
+<dl><dt><a name="BDManager-get_answerid"><strong>get_answerid</strong></a>(self, user_solution_id)</dt><dd><tt>Method&nbsp;to&nbsp;get&nbsp;answer&nbsp;id&nbsp;from&nbsp;database.<br>
+:param&nbsp;user_solution_id:&nbsp;user&nbsp;solution&nbsp;id.<br>
+:return:&nbsp;None&nbsp;if&nbsp;no&nbsp;results&nbsp;else&nbsp;return&nbsp;answer&nbsp;id.</tt></dd></dl>
+
+<dl><dt><a name="BDManager-get_solution"><strong>get_solution</strong></a>(self, user_solution_id)</dt><dd><tt>Method&nbsp;to&nbsp;get&nbsp;solution&nbsp;id&nbsp;from&nbsp;database.<br>
+:param&nbsp;user_solution_id:&nbsp;user&nbsp;solution&nbsp;id.<br>
+:return:&nbsp;None&nbsp;if&nbsp;no&nbsp;results&nbsp;else&nbsp;return&nbsp;solution&nbsp;id.</tt></dd></dl>
+
+<dl><dt><a name="BDManager-get_task_limit"><strong>get_task_limit</strong></a>(self, task_id, programming_language)</dt><dd><tt>Method&nbsp;to&nbsp;get&nbsp;task&nbsp;limit&nbsp;from&nbsp;database.<br>
+:param&nbsp;task_id:&nbsp;task&nbsp;id&nbsp;of&nbsp;solution.<br>
+:param&nbsp;programming_language:&nbsp;programming&nbsp;language&nbsp;of&nbsp;solution.<br>
+:return:&nbsp;None&nbsp;if&nbsp;no&nbsp;results&nbsp;else&nbsp;return&nbsp;result&nbsp;in&nbsp;TaskLimits&nbsp;struct.</tt></dd></dl>
+
+<dl><dt><a name="BDManager-get_taskid"><strong>get_taskid</strong></a>(self, user_solution_id)</dt><dd><tt>Method&nbsp;to&nbsp;get&nbsp;task&nbsp;id&nbsp;from&nbsp;database.<br>
+:param&nbsp;user_solution_id:&nbsp;user&nbsp;solution&nbsp;id.<br>
+:return:&nbsp;None&nbsp;if&nbsp;no&nbsp;results&nbsp;else&nbsp;return&nbsp;task&nbsp;id.</tt></dd></dl>
+
+<dl><dt><a name="BDManager-get_tests"><strong>get_tests</strong></a>(self, task_id)</dt><dd><tt>Method&nbsp;to&nbsp;get&nbsp;tests&nbsp;from&nbsp;database.<br>
+:param&nbsp;task_id:&nbsp;task&nbsp;id&nbsp;for&nbsp;tests.<br>
+:return:&nbsp;None&nbsp;if&nbsp;no&nbsp;results&nbsp;else&nbsp;return&nbsp;result&nbsp;in&nbsp;Tests&nbsp;struct.</tt></dd></dl>
+
+<dl><dt><a name="BDManager-make_request"><strong>make_request</strong></a>(self, request, params, insert=False)</dt><dd><tt>Method&nbsp;to&nbsp;make&nbsp;custom&nbsp;request&nbsp;to&nbsp;database.<br>
+:param&nbsp;request:&nbsp;body&nbsp;of&nbsp;SQL-request&nbsp;without&nbsp;parameters.<br>
+:param&nbsp;params:&nbsp;parameters&nbsp;for&nbsp;SQL-request.<br>
+:param&nbsp;delete:&nbsp;Is&nbsp;request&nbsp;for&nbsp;insert&nbsp;row.<br>
+:return:&nbsp;None&nbsp;if&nbsp;request&nbsp;for&nbsp;insert&nbsp;row&nbsp;else&nbsp;return&nbsp;result&nbsp;of&nbsp;request.</tt></dd></dl>
+
+<dl><dt><a name="BDManager-update_status_id"><strong>update_status_id</strong></a>(self, user_solution_id, status_id)</dt><dd><tt>Method&nbsp;to&nbsp;create&nbsp;SQL&nbsp;request&nbsp;to&nbsp;update&nbsp;status&nbsp;id&nbsp;of&nbsp;solution.<br>
+:param&nbsp;user_solution_id:&nbsp;user&nbsp;solution&nbsp;id.<br>
+:param&nbsp;status_id:&nbsp;status&nbsp;id.<br>
+:return:&nbsp;None</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table>
+</body></html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module main_server</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>main_server</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/john/Desktop/test-system/test-system/testsystem/main_server.py">/home/john/Desktop/test-system/test-system/testsystem/main_server.py</a></font></td></tr></table>
+    <p><tt>#from&nbsp;server.front_server&nbsp;import&nbsp;FrontServer</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="main_server.html#MainServer">MainServer</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="MainServer">class <strong>MainServer</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Organizes&nbsp;the&nbsp;interaction&nbsp;of&nbsp;all&nbsp;modules&nbsp;of&nbsp;the&nbsp;test&nbsp;system.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="MainServer-__init__"><strong>__init__</strong></a>(self)</dt><dd><tt>Initialisation&nbsp;of&nbsp;<a href="#MainServer">MainServer</a>.<br>
+&nbsp;:return:&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="MainServer-answer_validation"><strong>answer_validation</strong></a>(self, test, answer)</dt><dd><tt>Method&nbsp;compare&nbsp;user&nbsp;answer&nbsp;and&nbsp;right&nbsp;answer.<br>
+:param&nbsp;test:&nbsp;test&nbsp;struct&nbsp;with&nbsp;right&nbsp;answer.<br>
+:param&nbsp;answer:&nbsp;user&nbsp;answer.<br>
+:return:&nbsp;True&nbsp;if&nbsp;user&nbsp;answer&nbsp;is&nbsp;right&nbsp;else&nbsp;return&nbsp;False.</tt></dd></dl>
+
+<dl><dt><a name="MainServer-assembly_files"><strong>assembly_files</strong></a>(self, solution)</dt><dd><tt>Method&nbsp;prepare&nbsp;user&nbsp;solution&nbsp;to&nbsp;containerization.<br>
+:param&nbsp;solution:&nbsp;user&nbsp;solution&nbsp;struct.<br>
+:return:&nbsp;existing&nbsp;of&nbsp;error&nbsp;and&nbsp;ext&nbsp;information.</tt></dd></dl>
+
+<dl><dt><a name="MainServer-build_err_handler"><strong>build_err_handler</strong></a>(self, information, solution)</dt><dd><tt>Add&nbsp;error&nbsp;compile&nbsp;to&nbsp;user&nbsp;solution&nbsp;status&nbsp;in&nbsp;database.<br>
+&nbsp;:param&nbsp;information:&nbsp;extended&nbsp;information.<br>
+&nbsp;:param&nbsp;solution:&nbsp;user&nbsp;solution&nbsp;struct.<br>
+&nbsp;:return:&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="MainServer-build_image"><strong>build_image</strong></a>(self)</dt><dd><tt>Build&nbsp;image&nbsp;with&nbsp;users&nbsp;source&nbsp;code.<br>
+&nbsp;:param&nbsp;dockerfile:&nbsp;name&nbsp;of&nbsp;file&nbsp;with&nbsp;container&nbsp;settings.<br>
+&nbsp;:return:&nbsp;None.</tt></dd></dl>
+
+<dl><dt><a name="MainServer-command_formatter"><strong>command_formatter</strong></a>(self, lang)</dt><dd><tt>Method&nbsp;to&nbsp;create&nbsp;command&nbsp;that&nbsp;run&nbsp;docker&nbsp;image.<br>
+:param&nbsp;lang:&nbsp;programming&nbsp;language.<br>
+:return:&nbsp;command&nbsp;that&nbsp;run&nbsp;docker&nbsp;image.</tt></dd></dl>
+
+<dl><dt><a name="MainServer-err_code_validation"><strong>err_code_validation</strong></a>(self, err_res, test, solution)</dt><dd><tt>Method&nbsp;compare&nbsp;error&nbsp;code&nbsp;from&nbsp;test&nbsp;with&nbsp;patterns&nbsp;and&nbsp;save&nbsp;result&nbsp;<br>
+in&nbsp;database&nbsp;if&nbsp;error&nbsp;code&nbsp;!=&nbsp;0.<br>
+:param&nbsp;err_res:&nbsp;error&nbsp;code.<br>
+:param&nbsp;test:&nbsp;test&nbsp;struct&nbsp;with&nbsp;test&nbsp;id.<br>
+:param&nbsp;solution:&nbsp;user&nbsp;solution&nbsp;struct.<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;errors&nbsp;(err_res&nbsp;==&nbsp;0)&nbsp;else&nbsp;return&nbsp;-1.</tt></dd></dl>
+
+<dl><dt><a name="MainServer-get_solution"><strong>get_solution</strong></a>(self)</dt><dd><tt>Method&nbsp;to&nbsp;get&nbsp;solution&nbsp;struct&nbsp;from&nbsp;BDManager.<br>
+:return:&nbsp;solution&nbsp;struct.</tt></dd></dl>
+
+<dl><dt><a name="MainServer-rm_image"><strong>rm_image</strong></a>(self)</dt><dd><tt>Delete&nbsp;docker&nbsp;image&nbsp;after&nbsp;tests.<br>
+&nbsp;:param&nbsp;tag:&nbsp;tag&nbsp;of&nbsp;container.<br>
+&nbsp;:return:&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="MainServer-run_container"><strong>run_container</strong></a>(self, solution, command)</dt><dd><tt>Run&nbsp;the&nbsp;container&nbsp;for&nbsp;test.<br>
+&nbsp;:param&nbsp;solution:&nbsp;user&nbsp;solution&nbsp;struct.<br>
+&nbsp;:param&nbsp;command:&nbsp;docker&nbsp;command&nbsp;to&nbsp;run&nbsp;image.<br>
+&nbsp;:return:&nbsp;error&nbsp;code&nbsp;and&nbsp;ext&nbsp;information.</tt></dd></dl>
+
+<dl><dt><a name="MainServer-run_tests"><strong>run_tests</strong></a>(self, solution)</dt><dd><tt>Run&nbsp;the&nbsp;tests&nbsp;for&nbsp;users&nbsp;solution&nbsp;and&nbsp;save&nbsp;result&nbsp;to&nbsp;database.<br>
+&nbsp;:param&nbsp;solution:&nbsp;user&nbsp;solution&nbsp;struct.<br>
+&nbsp;:return:&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="MainServer-start"><strong>start</strong></a>(self)</dt><dd><tt>Start&nbsp;the&nbsp;<a href="#MainServer">MainServer</a>&nbsp;in&nbsp;infinite&nbsp;loop.<br>
+&nbsp;:return:&nbsp;None.</tt></dd></dl>
+
+<dl><dt><a name="MainServer-worker"><strong>worker</strong></a>(self)</dt><dd><tt>Get,&nbsp;compile&nbsp;and&nbsp;test&nbsp;one&nbsp;user&nbsp;solution&nbsp;from&nbsp;queue.<br>
+&nbsp;:return:&nbsp;None</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-init"><strong>init</strong></a>()</dt><dd><tt>Init&nbsp;the&nbsp;<a href="#MainServer">MainServer</a>&nbsp;and&nbsp;frontend&nbsp;server.<br>
+&nbsp;:return:&nbsp;None.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>db_settings</strong> = {'database': 'ejudge', 'host': 'localhost', 'password': '0000', 'port': '5433', 'user': 'postgres'}<br>
+<strong>docker_file_folder</strong> = 'data/'<br>
+<strong>docker_tag</strong> = 'test:test'<br>
+<strong>out_file</strong> = 'source.'<br>
+<strong>rest_settings</strong> = {'host': 'localhost', 'port': 8088}</td></tr></table>
+</body></html>

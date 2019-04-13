@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module builder</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>builder</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/john/Desktop/test-system/test-system/testsystem/core/builder.py">/home/john/Desktop/test-system/test-system/testsystem/core/builder.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="glob.html">glob</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="builder.html#AppBuilder">AppBuilder</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="AppBuilder">class <strong>AppBuilder</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#AppBuilder">AppBuilder</a>&nbsp;is&nbsp;needed&nbsp;for&nbsp;the&nbsp;interaction&nbsp;with&nbsp;source&nbsp;codes&nbsp;of&nbsp;solutions.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="AppBuilder-__init__"><strong>__init__</strong></a>(self)</dt><dd><tt>Initialisation&nbsp;of&nbsp;<a href="#AppBuilder">AppBuilder</a>.<br>
+&nbsp;:return:&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="AppBuilder-assembly"><strong>assembly</strong></a>(self, source_text, programming_language)</dt><dd><tt>Method&nbsp;prepare&nbsp;users&nbsp;code&nbsp;to&nbsp;containerization.<br>
+:param&nbsp;programming_language:&nbsp;programming&nbsp;language.<br>
+:param&nbsp;source_text:&nbsp;users&nbsp;source&nbsp;code.<br>
+:return:&nbsp;existing&nbsp;of&nbsp;error&nbsp;and&nbsp;ext&nbsp;information.</tt></dd></dl>
+
+<dl><dt><a name="AppBuilder-clean_folder"><strong>clean_folder</strong></a>(self)</dt><dd><tt>Delete&nbsp;all&nbsp;temporary&nbsp;files&nbsp;in&nbsp;docker&nbsp;folder.<br>
+&nbsp;:return:&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="AppBuilder-compile"><strong>compile</strong></a>(self, settings)</dt><dd><tt>Compile&nbsp;file&nbsp;with&nbsp;users&nbsp;source&nbsp;code.<br>
+&nbsp;:param&nbsp;setting:&nbsp;settings&nbsp;for&nbsp;programming&nbsp;language.<br>
+&nbsp;:return:&nbsp;stdout&nbsp;of&nbsp;compiler&nbsp;and&nbsp;error&nbsp;code</tt></dd></dl>
+
+<dl><dt><a name="AppBuilder-create_source"><strong>create_source</strong></a>(self, filename, text='')</dt><dd><tt>Create&nbsp;file&nbsp;with&nbsp;users&nbsp;source&nbsp;code.<br>
+&nbsp;:param&nbsp;filename:&nbsp;name&nbsp;of&nbsp;file.<br>
+&nbsp;:param&nbsp;text:&nbsp;users&nbsp;source&nbsp;code.<br>
+&nbsp;:return:&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="AppBuilder-create_temp_folder"><strong>create_temp_folder</strong></a>(self)</dt><dd><tt>Create&nbsp;folder&nbsp;for&nbsp;users&nbsp;source&nbsp;code.<br>
+&nbsp;:return:&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="AppBuilder-delete_file"><strong>delete_file</strong></a>(self, filename)</dt><dd><tt>Delete&nbsp;certain&nbsp;file.<br>
+&nbsp;:param&nbsp;filename:&nbsp;name&nbsp;of&nbsp;file.<br>
+&nbsp;:return:&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="AppBuilder-get_lang_setting"><strong>get_lang_setting</strong></a>(self, programming_language)</dt><dd><tt>Method&nbsp;to&nbsp;get&nbsp;settings&nbsp;for&nbsp;programming&nbsp;language.<br>
+:param&nbsp;programming_language:&nbsp;programming&nbsp;language.<br>
+:return:&nbsp;None&nbsp;if&nbsp;no&nbsp;results&nbsp;else&nbsp;return&nbsp;setting.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>PIPE</strong> = -1</td></tr></table>
+</body></html>

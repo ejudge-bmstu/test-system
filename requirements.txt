@@ -1,0 +1,5 @@
+Flask==1.0.2
+psycopg2==2.7.7
+requests==2.18.4
+timeout_decorator==0.4.1
+docker_py==1.10.6
