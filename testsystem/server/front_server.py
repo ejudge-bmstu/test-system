@@ -7,6 +7,7 @@ class FrontServer(Thread):
     """
     FrontServer is needed to transfer information from the webback to QueueSender.
     """
+
     def __init__(self, db_settings, rest_settings):
         """
    Initialisation of FrontServer.
@@ -18,6 +19,7 @@ class FrontServer(Thread):
         self.sender = QueueSender(db_settings)
         self.sender.init_queue(queue)
         self.rest_settings = rest_settings
+
     def run(self):
         """
     Method run FrontServer.
@@ -25,8 +27,6 @@ class FrontServer(Thread):
     """
         self.sender.start()
         app.run(**self.rest_settings)
-
-
 
 
 if __name__ == '__main__':

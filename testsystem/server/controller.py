@@ -13,12 +13,13 @@ Queue to transfer the solution_id to the database.
 """
 queue = Queue()
 
+
 @app.route(GET_PATH + "<%s>" % PARAM_NAME, methods=['GET'])
 def get_solution_id(solution_id):
     """
    GET request handler for web backend.
     :param solution_id: id of user solution
-    :return: returns 200 if solution_id is valid else 400 
+    :return: returns 200 if solution_id is valid else 400
     """
     if validate_uuid(solution_id):
         resp = Response(status=200)

@@ -1,5 +1,6 @@
 from .tasklimits import TaskLimits
 
+
 class Solution(object):
     def __init__(self, user_solution_id, answer, tests, limits):
         self.answer = answer
@@ -17,7 +18,7 @@ class Solution(object):
 
     @status.setter
     def status(self, value):
-        self.__status = value 
+        self.__status = value
 
     def get_limit(self, lang):
         return self.limits

@@ -9,6 +9,7 @@ class QueueRetriever(Thread):
     """
     QueueRetriever need to get solution id from database queue.
     """
+
     def __init__(self, db_settings):
         """
    Initialisation of QueueRetriever.
@@ -21,7 +22,7 @@ class QueueRetriever(Thread):
 
         self.debug = False
 
-    def __make_request(self, request, params = {}, delete = False):
+    def __make_request(self, request, params={}, delete=False):
         """
     Method to make custom request to database.
     :param request: body of SQL-request without parameters.
@@ -38,7 +39,6 @@ class QueueRetriever(Thread):
                 result = None
         return result
 
-
     def __del_element(self, queue_id):
         """
     Method to create SQL request to remove solution_id from queue.
@@ -48,8 +48,6 @@ class QueueRetriever(Thread):
         request = "DELETE FROM queue WHERE id=%(queue_id)s"
         param = {"queue_id": queue_id}
         self.__make_request(request, param, True)
-
-
 
     def __get(self):
         """
@@ -93,11 +91,10 @@ class QueueRetriever(Thread):
                 return
 
 
-            
-if  __name__ == "__main__":
+if __name__ == "__main__":
     QR = QueueRetriever()
     QR.debug = True
     QR.start()
-    while 1:
+    while True:
         print(QR.queue.get())
-    b= 0
+    b = 0

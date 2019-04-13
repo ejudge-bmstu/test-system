@@ -1,19 +1,24 @@
-import os, glob
+import os
+import glob
 from subprocess import Popen, PIPE
 from .settings import docker_file_folder, docker_test_folder, out_file, settings_list
+
 
 class AppBuilder(object):
     """
     AppBuilder is needed for the interaction with source codes of solutions.
     """
+
     def __init__(self):
         """
    Initialisation of AppBuilder.
     :return: None
     """
-        self.docker_test_folder = os.path.dirname(os.path.realpath(__file__)) + "/"+docker_test_folder
+        self.docker_test_folder = os.path.dirname(
+            os.path.realpath(__file__)) + "/" + docker_test_folder
         self.code_filename = self.docker_test_folder + out_file
-        self.docker_file_folder = os.path.dirname(os.path.realpath(__file__)) + "/"+docker_file_folder
+        self.docker_file_folder = os.path.dirname(
+            os.path.realpath(__file__)) + "/" + docker_file_folder
 
     def _create_temp_folder(self):
         """
@@ -32,7 +37,7 @@ class AppBuilder(object):
         if os.path.exists(filename):
             os.unlink(filename)
 
-    def _create_source(self, filename, text = ""):
+    def _create_source(self, filename, text=""):
         """
    Create file with users source code.
     :param filename: name of file.
@@ -53,8 +58,6 @@ class AppBuilder(object):
                 return setting
         return None
 
-
-
     def compile(self, settings):
         """
    Compile file with users source code.
@@ -64,7 +67,7 @@ class AppBuilder(object):
         process = Popen(settings.split(), stdout=PIPE, stderr=PIPE)
         output, error = process.communicate()
         return (output, error.decode("utf-8"))
-    
+
     def assembly(self, source_text, programming_language):
         """
     Method prepare users code to containerization.
@@ -84,17 +87,16 @@ class AppBuilder(object):
             if len(error) != 0:
                 result = (True, error)
         return result
-        
+
     def clean_folder(self):
         """
    Delete all temporary files in docker folder.
     :return: None
     """
-        listfiles = [os.path.abspath(f) for f in os.listdir(docker_test_folder)]
+        listfiles = [os.path.abspath(f)
+                     for f in os.listdir(docker_test_folder)]
         for f in listfiles:
             self._delete_file(f)
-
-
 
 
 if __name__ == "__main__":
@@ -103,18 +105,7 @@ if __name__ == "__main__":
 int main (void) {puts ("Hello, World!");return 0;}
                     """
     app_builder.assembly(source, "c")
-    fout = app_builder.code_filename + app_builder._get_lang_setting("c").exe_type
-    
+    fout = app_builder.code_filename + \
+        app_builder._get_lang_setting("c").exe_type
+
     result = os.path.exists(fout)
-    
-
-
-
-
-        
-
-
-        
-
-    
-

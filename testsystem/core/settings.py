@@ -7,8 +7,8 @@ class CompileSettings(object):
         self.source_type = None
 
     def get_command(self, fin, fout):
-        return self.parameters + " %s -o %s " % (fin ,fout)
-    
+        return self.parameters + " %s -o %s " % (fin, fout)
+
 
 class CompileSettingsC(CompileSettings):
     def __init__(self):
@@ -18,10 +18,11 @@ class CompileSettingsC(CompileSettings):
         self.exe_type = "out"
         self.source_type = "c"
 
+
 class CompileSettingsCpp(CompileSettings):
     def __init__(self):
         super().__init__()
-        self.parameters = "g++ -O0 -w " 
+        self.parameters = "g++ -O0 -w "
         self.lang = "cpp"
         self.exe_type = "out"
         self.source_type = "cpp"
@@ -37,7 +38,10 @@ class CompileSettingsPython(CompileSettings):
         self.is_compiled = False
 
 
-settings_list = (CompileSettingsC(), CompileSettingsCpp(), CompileSettingsPython())
+settings_list = (
+    CompileSettingsC(),
+    CompileSettingsCpp(),
+    CompileSettingsPython())
 docker_test_folder = "data/testdir/"
 docker_file_folder = "data/"
 docker_tag = "test:test"

@@ -10,6 +10,7 @@ class QueueSender(Thread):
     """
     FrontServer is needed to transfer information from the webback to database .
     """
+
     def __init__(self, db_settings):
         """
    Initialisation of FrontServer.
@@ -20,7 +21,6 @@ class QueueSender(Thread):
         self.connection = psycopg2.connect(**db_settings)
         self.connection.autocommit = True
         self.queue = None
-
 
     def init_queue(self, queue):
         """

@@ -2,10 +2,12 @@ import psycopg2
 from .tablestructures import answers, solution, tasklimits, tests
 import uuid
 
+
 class BDManager():
     """
     BDManager is needed for the interaction of the main server and the database.
     """
+
     def __init__(self, db_settings):
         """
    Initialisation of BDManager.
@@ -15,7 +17,7 @@ class BDManager():
         self.connection = psycopg2.connect(**db_settings)
         self.connection.autocommit = True
 
-    def _make_request(self, request, params, insert = False):
+    def _make_request(self, request, params, insert=False):
         """
     Method to make custom request to database.
     :param request: body of SQL-request without parameters.
@@ -54,8 +56,11 @@ class BDManager():
     :param programming_language: programming language of solution.
     :return: None if no results else return result in TaskLimits struct.
     """
-        request = """SELECT memory_limit, time_limit, programming_language FROM task_limits WHERE task_id = %(task_id)s AND programming_language = %(programming_language)s"""
-        params = {'task_id': task_id, 'programming_language': programming_language}
+        request = """SELECT memory_limit, time_limit, programming_language FROM task_limits WHERE 
+                     task_id = %(task_id)s AND programming_language = %(programming_language)s"""
+        params = {
+            'task_id': task_id,
+            'programming_language': programming_language}
         results = self._make_request(request, params)
 
         if len(results) == 0:
@@ -109,8 +114,6 @@ class BDManager():
         else:
             return results[0][0]
 
-
-
     def get_solution(self, user_solution_id):
         """
     Method to get solution id from database.
@@ -127,7 +130,13 @@ class BDManager():
         sol = solution.Solution(user_solution_id, answer, tests, task_limit)
         return sol
 
-    def _add_status(self, status_id, result, passed, error_test_id, ext_info = ""):
+    def _add_status(
+            self,
+            status_id,
+            result,
+            passed,
+            error_test_id,
+            ext_info=""):
         """
     Method to create SQL request to add status of solution.
     :param status_id: status id.
@@ -136,8 +145,14 @@ class BDManager():
     :param ext_info: extended information.
     :return: None
     """
-        request = """INSERT INTO status (id, result, passed, error_test_id, extended_information) VALUES (%(status_id)s,%(result)s,%(passed)s,%(error_test_id)s,%(ext_info)s)"""
-        params = {'status_id': status_id, 'result': result, 'passed': passed,'error_test_id': error_test_id, 'ext_info': ext_info }
+        request = """INSERT INTO status (id, result, passed, error_test_id, extended_information) VALUES 
+                     (%(status_id)s,%(result)s,%(passed)s,%(error_test_id)s,%(ext_info)s)"""
+        params = {
+            'status_id': status_id,
+            'result': result,
+            'passed': passed,
+            'error_test_id': error_test_id,
+            'ext_info': ext_info}
         self._make_request(request, params, True)
 
     def _update_status_id(self, user_solution_id, status_id):
@@ -151,9 +166,13 @@ class BDManager():
         params = {'user_solution_id': user_solution_id, 'status_id': status_id}
         self._make_request(request, params, True)
 
-
-
-    def add_status(self, user_solution_id, result, passed, error_test_id, ext_info = ""):
+    def add_status(
+            self,
+            user_solution_id,
+            result,
+            passed,
+            error_test_id,
+            ext_info=""):
         """
     Method to add status of solution.
     :param status_id: status id.
@@ -163,19 +182,12 @@ class BDManager():
     :return: new id of created status
     """
         status_id = str(uuid.uuid1())
-        self._add_status(status_id,result,passed,error_test_id,ext_info)
+        self._add_status(status_id, result, passed, error_test_id, ext_info)
         self._update_status_id(user_solution_id, status_id)
         return status_id
 
 
+if __name__ == "__main__":
 
-
-
-if  __name__ == "__main__":
-    
     bd = BDManager()
     g = bd.get_solution('e6e1786c-3fe6-4760-8ef4-8785e5be6b06')
-    g = 0
-    
-
-
