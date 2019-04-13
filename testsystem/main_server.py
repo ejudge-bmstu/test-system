@@ -96,8 +96,9 @@ class MainServer(object):
     :param answer: user answer.
     :return: True if user answer is right else return False.
     """
-        answer = answer.strip()
-        test_str = test.output_data.strip()
+        
+        answer = "" if answer is None else answer.strip()
+        test_str = "" if test.output_data is None else test.output_data.strip()
         return answer == test_str
 
     def err_code_validation(self, err_res, test, solution):
