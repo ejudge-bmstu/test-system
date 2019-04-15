@@ -1,4 +1,4 @@
-#     test-system
+#  test-system
 Для запуска сервиса необходимо запустить скрипт: run_service.sh
 
 Для установки всех зависимостей python необходимо выполнить команду: pip3 install -r requirements.txt
